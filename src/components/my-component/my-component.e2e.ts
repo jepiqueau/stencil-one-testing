@@ -1,4 +1,5 @@
 import { newE2EPage, E2EPage, E2EElement } from '@stencil/core/testing';
+import { EventSpy } from '@stencil/core/dist/declarations';
 
 describe('my-component', () => {
   let page: E2EPage;
@@ -46,12 +47,12 @@ describe('my-component', () => {
   });
 
   it('should not fire "initevent" if init method not called', async () => {
-    const eventSpy = await cmp.spyOnEvent('initevent');
+    const eventSpy:EventSpy = await cmp.spyOnEvent('initevent');
     await page.waitForChanges();
     expect(eventSpy).toHaveReceivedEventTimes(0);
   });
   it('should fire "initevent" on init ', async () => {
-    const eventSpy = await cmp.spyOnEvent('initevent');
+    const eventSpy:EventSpy = await cmp.spyOnEvent('initevent');
     await cmp.callMethod('init');
     await page.waitForChanges();
     expect(eventSpy).toHaveReceivedEventTimes(1);
@@ -61,7 +62,7 @@ describe('my-component', () => {
     expect(receivedEvent.type).toEqual('initevent');
   });
   it('should change the last name when "testevent" is triggered', async () => {
-    const eventSpy = await cmp.spyOnEvent('testevent');
+    const eventSpy:EventSpy = await cmp.spyOnEvent('testevent');
     const elm = await page.find('my-component >>> div');
     cmp.setProperty('first', 'James');
     cmp.setProperty('last', 'Quincy');
@@ -77,3 +78,4 @@ describe('my-component', () => {
   });
 
 });
+
