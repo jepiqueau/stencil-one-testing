@@ -16,9 +16,9 @@
 
 ## Events
 
-| Event       | Description                      | Type               |
-| ----------- | -------------------------------- | ------------------ |
-| `initevent` | Emitted when the component Loads | `CustomEvent<any>` |
+| Event       | Description                      | Type                              |
+| ----------- | -------------------------------- | --------------------------------- |
+| `initevent` | Emitted when the component Loads | `CustomEvent<{ init: boolean; }>` |
 
 
 ## Methods

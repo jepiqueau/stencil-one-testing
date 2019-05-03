@@ -1,5 +1,15 @@
-import { JSX, h, Component, Prop, State, Watch, Method, Event, EventEmitter, Listen } from '@stencil/core';
+import { JSX, h, Component, Element, Prop, State, Watch, Method, Event, EventEmitter, Listen } from '@stencil/core';
 import { format } from '../../utils/utils';
+
+const getBoundingClientRect = (el:Element,delay:number): Promise<ClientRect> => {
+  return new Promise((resolve) => {
+      setTimeout(() => {
+          let rectBB:ClientRect;
+          rectBB = el.getBoundingClientRect();
+          resolve(rectBB);
+      },delay);    
+  });
+}
 
 @Component({
   tag: 'my-component',
@@ -7,6 +17,8 @@ import { format } from '../../utils/utils';
   shadow: true
 })
 export class MyComponent {
+
+  @Element() el!: HTMLMyComponentElement;
   //************************
   //* Property Definitions *
   //************************
@@ -85,6 +97,7 @@ export class MyComponent {
   //* Internal Variable Definitions *
   //*********************************
 
+ 
   //*******************************
   //* Component Lifecycle Methods *
   //*******************************
@@ -114,6 +127,6 @@ export class MyComponent {
   //*************************
 
   render(): JSX.Element {
-    return <div>Hello, World! I'm {this.getText()}</div>;
+    return <div class="mytext">Hello, World! I'm {this.getText()}</div>;
   }
 }

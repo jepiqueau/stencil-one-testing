@@ -1,14 +1,28 @@
 import { newE2EPage, E2EPage, E2EElement } from '@stencil/core/testing';
 import { EventSpy } from '@stencil/core/dist/declarations';
+import { Viewport } from 'puppeteer';
 
 describe('my-component', () => {
   let page: E2EPage;
   let cmp: E2EElement;
 
+  async function getBoundingClientRect(component:string,selector:string) : Promise<any> {
+    const retRect:any = await page.evaluate((component,selector) => {
+      const cmpEl = document.querySelector(component);
+      const textEl = cmpEl.shadowRoot.querySelector(selector);
+      const rect = textEl.getBoundingClientRect();
+      return {top:rect.top,left:rect.left,width:rect.width,height:rect.height}},component,selector)
+    return retRect;
+  }
+
   beforeEach(async () => {
     page = await newE2EPage();
     
-    await page.setContent('<my-component></my-component>');
+    await page.setContent('<body style="margin:0px;"><my-component></my-component>');
+    const viewPort: Viewport = {width:360,height:640, deviceScaleFactor: 1};
+    page.setViewport(viewPort);
+    innerWidth = await page.evaluate(_ => {return window.innerWidth})
+    innerHeight = await page.evaluate(_ => {return window.innerHeight})
     cmp = await page.find('my-component');
   });
 
@@ -16,14 +30,14 @@ describe('my-component', () => {
     expect(cmp).toEqualHtml(`
       <my-component class=\"hydrated\">
       <shadow-root>
-        <div>
+        <div class=\"mytext\">
           Hello, World! I'm
         </div>
       </shadow-root>
     </my-component>
     `);
     expect(cmp.innerHTML).toEqualHtml(``);
-    expect(cmp.shadowRoot).toEqualHtml(`<div>Hello, World! I'm</div>`);
+    expect(cmp.shadowRoot).toEqualHtml(`<div class=\"mytext\">Hello, World! I'm</div>`);
   });
 
   it('renders changes to the name data', async () => {
@@ -77,5 +91,14 @@ describe('my-component', () => {
 
   });
 
+  it('should display the text at position top 10vh left 10vw', async () => {
+
+    const rect:any = await getBoundingClientRect('my-component','.mytext'); 
+    expect(rect.top).toEqual(64);
+    expect(rect.left).toEqual(36);
+    expect(rect.width).toEqual(360);
+    expect(rect.height).toEqual(18);
+    
+  });
 });
 
