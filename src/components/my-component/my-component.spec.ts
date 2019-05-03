@@ -35,7 +35,7 @@ describe('my-component', () => {
   it('renders changes to the name data', async () => {
     expect(root).toEqualHtml(`<my-component class=\"hydrated\">
       <shadow-root>
-        <div>
+        <div class=\"mytext\">
           Hello, World! I'm
         </div>
       </shadow-root>
