@@ -1,15 +1,6 @@
 import { JSX, h, Component, Element, Prop, State, Watch, Method, Event, EventEmitter, Listen } from '@stencil/core';
 import { format } from '../../utils/utils';
 
-const getBoundingClientRect = (el:Element,delay:number): Promise<ClientRect> => {
-  return new Promise((resolve) => {
-      setTimeout(() => {
-          let rectBB:ClientRect;
-          rectBB = el.getBoundingClientRect();
-          resolve(rectBB);
-      },delay);    
-  });
-}
 
 @Component({
   tag: 'my-component',
@@ -45,6 +36,7 @@ export class MyComponent {
   @State() innerFirst: string;
   @State() innerMiddle: string;
   @State() innerLast: string;
+  @State() backColor: string;
 
   //*****************************
   //* Watch on Property Changes *
@@ -114,6 +106,10 @@ export class MyComponent {
       this.parseFirstProp(this.first ? this.first : "");
       this.parseMiddleProp(this.middle ? this.middle : "");       
       this.parseLastProp(this.last ? this.last : "");
+      this.backColor= window.getComputedStyle(this.el).getPropertyValue('--my-background-color').trim();
+      console.log('this._backColor ',this.backColor) 
+      const top = window.getComputedStyle(this.el).getPropertyValue('--my-top');
+      console.log('in _init top ',top) 
       this.initevent.emit({init:true});
       return;
   }
@@ -127,6 +123,15 @@ export class MyComponent {
   //*************************
 
   render(): JSX.Element {
-    return <div class="mytext">Hello, World! I'm {this.getText()}</div>;
+    return (
+      <div class="container">
+        <div class="wrapper">
+          <svg width="100%" height="100%">
+            <rect id="svgBackground" width="100%" height="100%" fill={this.backColor}/>
+          </svg>
+          <div class="mytext">Hello, World! I'm {this.getText()}</div>
+        </div>
+      </div>
+    );
   }
 }

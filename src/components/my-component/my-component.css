@@ -1,5 +1,32 @@
+:host {
+    --my-top: 10vh;
+    --my-left: 10vw;
+    --my-width: 50vw;
+    --my-height: 50vh;
+    --my-background-color: #242424;
+}
+.container {
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    right: 0; 
+    left: 0; 
+    overflow: hidden;
+}
+.wrapper {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    top: var(--my-top);
+    left: var(--my-left);
+    position: relative;
+    width: var(--my-width);
+    height: var(--my-height);    
+}    
 .mytext {
-    position:relative;
-    top: 10vh;
-    left: 10vw;
+    position:absolute;
+    top: 5vh;
+    left: 5vw;
+    color: #ffffff;
+    font-size: 20px;
 }

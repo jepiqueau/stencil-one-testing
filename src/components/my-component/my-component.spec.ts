@@ -8,7 +8,7 @@ describe('my-component', () => {
   beforeEach(async () => {
     page = await newSpecPage({
       components: [MyComponent],
-      html: '<my-component></my-component>'
+      html: '<my-component style="--my-background-color:#ff0000;"></my-component>'
     });
     root = page.root;
     doc = page.doc;
@@ -20,7 +20,7 @@ describe('my-component', () => {
   it('renders changes when first property is given', async () => {
     root.first = "John";
     await page.waitForChanges();
-    const div = await root.shadowRoot.querySelector('div');
+    const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm John`);
   }); 
   
@@ -28,20 +28,29 @@ describe('my-component', () => {
     root.first = "John";
     root.last = "Smith"
     await page.waitForChanges();
-    const div = await root.shadowRoot.querySelector('div');
+    const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm John Smith`);
   }); 
 
   it('renders changes to the name data', async () => {
-    expect(root).toEqualHtml(`<my-component class=\"hydrated\">
+    root.init();
+    await page.waitForChanges();
+    expect(root).toEqualHtml(`<my-component class="hydrated">
       <shadow-root>
-        <div class=\"mytext\">
-          Hello, World! I'm
+        <div class="container">
+          <div class="wrapper"
+            <svg height="100%" width="100%">
+              <rect fill="#ff0000" height="100%" id="svgBackground" width="100%"></rect>
+            </svg>
+            <div class="mytext">
+              Hello, World! I'm
+            </div>
+          </div>
         </div>
       </shadow-root>
     </my-component>`);
     expect(root).toHaveClass('hydrated');
-    const div = await root.shadowRoot.querySelector('div');
+    const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm `);
     root.first = "James";
     await page.waitForChanges();
@@ -72,7 +81,7 @@ describe('my-component', () => {
     });
     doc.dispatchEvent(myevent); 
     await page.waitForChanges();   
-    const div = await root.shadowRoot.querySelector('div');
+    const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm  Jeep`);
   });
 

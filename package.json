@@ -1,6 +1,6 @@
 {
   "name": "stencil-one-testing",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Stencil One Demonstrating Unit & E2E Tests",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
