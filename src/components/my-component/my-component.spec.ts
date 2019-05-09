@@ -5,20 +5,22 @@ describe('my-component', () => {
   let page: any;
   let root: any;
   let doc: Document;
+  let win: Window;
   beforeEach(async () => {
     page = await newSpecPage({
       components: [MyComponent],
-      html: '<my-component style="--my-background-color:#ff0000;"></my-component>'
+      html: '<my-component></my-component>'
     });
     root = page.root;
     doc = page.doc;
+    win = page.win;
   });
   afterEach (async () => {
     page = null;
   });
   
   it('renders changes when first property is given', async () => {
-    root.first = "John";
+   root.first = "John";
     await page.waitForChanges();
     const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm John`);
@@ -35,12 +37,13 @@ describe('my-component', () => {
   it('renders changes to the name data', async () => {
     root.init();
     await page.waitForChanges();
-    expect(root).toEqualHtml(`<my-component class="hydrated">
+    expect(root).toEqualHtml(`
+    <my-component class="hydrated" style="--my-background-color: #242424; --my-top: 10vh; --my-left: 10vw; --my-width: 50vw; --my-height: 50vh;">
       <shadow-root>
         <div class="container">
-          <div class="wrapper"
+          <div class="wrapper">
             <svg height="100%" width="100%">
-              <rect fill="#ff0000" height="100%" id="svgBackground" width="100%"></rect>
+              <rect id="svgBackground" width="100%" height="100%" fill="var(--my-background-color)"></rect>
             </svg>
             <div class="mytext">
               Hello, World! I'm
@@ -65,7 +68,6 @@ describe('my-component', () => {
   }); 
 
   it('should emit "initevent" on init ', async () => {
-
     root.addEventListener('initevent',(ev: CustomEvent) => {
       expect(ev.detail.init).toBeTruthy();
     },false)
@@ -73,7 +75,6 @@ describe('my-component', () => {
     await page.waitForChanges();
   });
   it('should respond to "testevent" ', async () => {
-
     const myevent = new CustomEvent("testevent", {
       detail: {
         last: "Jeep"
@@ -83,6 +84,31 @@ describe('my-component', () => {
     await page.waitForChanges();   
     const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm  Jeep`);
+  });
+
+  it('should display svg rect color #242424 ', async () => {
+
+    const rectEl:SVGRectElement = await root.shadowRoot.querySelector('#svgBackground');
+    const fill:string = rectEl.getAttribute('fill');
+    console.log('rectEl fill attribute ', fill);
+    const fillColor = win.getComputedStyle(root).getPropertyValue(fill.substring(4).slice(0,-1));
+    expect(fillColor).toEqual(`#242424`);
+  });
+
+});
+
+describe('my-component change in css properties', () => {
+  it('should display svg rect color #ff0000 ', async () => {
+    const page:any = await newSpecPage({
+      components: [MyComponent],
+      html: '<my-component style="--my-background-color:#ff0000"></my-component>'
+    });
+    const root:any = page.root;
+    const win = page.win;
+    const rectEl:SVGRectElement = await root.shadowRoot.querySelector('#svgBackground');
+    const fill:string = rectEl.getAttribute('fill');
+    const fillColor = win.getComputedStyle(root).getPropertyValue(fill.substring(4).slice(0,-1));
+    expect(fillColor).toEqual(`#ff0000`);
   });
 
 });

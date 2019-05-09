@@ -1,5 +1,5 @@
 import { JSX, h, Component, Element, Prop, State, Watch, Method, Event, EventEmitter, Listen } from '@stencil/core';
-import { format } from '../../utils/utils';
+import { format, cssVar } from '../../utils/utils';
 
 
 @Component({
@@ -36,7 +36,7 @@ export class MyComponent {
   @State() innerFirst: string;
   @State() innerMiddle: string;
   @State() innerLast: string;
-  @State() backColor: string;
+//  @State() backColor: string;
 
   //*****************************
   //* Watch on Property Changes *
@@ -89,7 +89,11 @@ export class MyComponent {
   //* Internal Variable Definitions *
   //*********************************
 
- 
+  _backColor: string; 
+  _wrapTop: string; 
+  _wrapLeft: string; 
+  _wrapWidth: string;
+  _wrapHeight: string ;
   //*******************************
   //* Component Lifecycle Methods *
   //*******************************
@@ -97,7 +101,8 @@ export class MyComponent {
   async componentWillLoad() {
       await this.init();
   }
-    
+  async componentDidLoad() {
+  }
   //******************************
   //* Private Method Definitions *
   //******************************
@@ -106,10 +111,17 @@ export class MyComponent {
       this.parseFirstProp(this.first ? this.first : "");
       this.parseMiddleProp(this.middle ? this.middle : "");       
       this.parseLastProp(this.last ? this.last : "");
-      this.backColor= window.getComputedStyle(this.el).getPropertyValue('--my-background-color').trim();
-      console.log('this._backColor ',this.backColor) 
-      const top = window.getComputedStyle(this.el).getPropertyValue('--my-top');
-      console.log('in _init top ',top) 
+      this._backColor = cssVar(window,this.el,'--my-background-color');
+      this._backColor = this._backColor ? this._backColor : cssVar(window,this.el,'--my-background-color','#242424');
+      this._wrapTop = cssVar(window,this.el,'--my-top');
+      this._wrapTop = this._wrapTop ? this._wrapTop : cssVar(window,this.el,'my-top','10vh');
+      this._wrapLeft = cssVar(window,this.el,'--my-left');
+      this._wrapLeft = this._wrapLeft ? this._wrapLeft : cssVar(window,this.el,'my-left','10vw');
+      this._wrapWidth = cssVar(window,this.el,'--my-width');
+      this._wrapWidth = this._wrapWidth ? this._wrapWidth : cssVar(window,this.el,'my-width','50vw');
+      this._wrapHeight = cssVar(window,this.el,'--my-height');
+      this._wrapHeight = this._wrapHeight ? this._wrapHeight : cssVar(window,this.el,'my-height','50vh');
+  
       this.initevent.emit({init:true});
       return;
   }
@@ -127,7 +139,7 @@ export class MyComponent {
       <div class="container">
         <div class="wrapper">
           <svg width="100%" height="100%">
-            <rect id="svgBackground" width="100%" height="100%" fill={this.backColor}/>
+            <rect id="svgBackground" width="100%" height="100%" fill="var(--my-background-color)"/>
           </svg>
           <div class="mytext">Hello, World! I'm {this.getText()}</div>
         </div>

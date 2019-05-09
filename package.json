@@ -1,6 +1,6 @@
 {
   "name": "stencil-one-testing",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Stencil One Demonstrating Unit & E2E Tests",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@stencil/core": "^1.0.0-alpha.14",
+    "@stencil/core": "^1.0.0-alpha.22",
     "@types/jest": "23.3.14",
     "@types/puppeteer": "1.12.3",
     "jest": "23.6.0",

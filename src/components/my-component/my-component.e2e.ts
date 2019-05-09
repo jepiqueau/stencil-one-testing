@@ -16,13 +16,9 @@ describe('my-component', () => {
   async function getSVGFillColor(component:string,selector:string) : Promise<string> {
     const fillColor: string = await page.evaluate((component,selector) => {
       const cmpEl: Element = document.querySelector(component);
-      const svgEl:SVGSVGElement = cmpEl.shadowRoot.querySelector('svg');
       const selEl:SVGElement = cmpEl.shadowRoot.querySelector(selector);
-      console.log('selEl ',selEl)
-      console.log('***width,height ',selEl.getAttribute('x'),selEl.getAttribute('y'),selEl.getAttribute('width'),selEl.getAttribute('height'))
-      console.log('***fill ',selEl.getAttribute('fill'))
-      const fillColor = selEl.getAttribute('fill');
-      console.log('fillColor ',fillColor)
+      const fillColorAttr = selEl.getAttribute('fill');
+      const fillColor = window.getComputedStyle(cmpEl).getPropertyValue(fillColorAttr.substring(4).slice(0,-1));
       return fillColor;
     },component,selector)
     return fillColor;
@@ -33,6 +29,7 @@ describe('my-component', () => {
     const viewPort: Viewport = {width:360,height:640, deviceScaleFactor: 1};
     page.setViewport(viewPort);
   });
+
   it('should open a window of size 360x640', async () => {
     innerWidth = await page.evaluate(_ => {return window.innerWidth});
     innerHeight = await page.evaluate(_ => {return window.innerHeight});
@@ -51,7 +48,7 @@ describe('my-component', () => {
         <div class="container">
           <div class="wrapper">
             <svg height="100%" width="100%">
-              <rect fill="#242424" height="100%" id="svgBackground" width="100%"></rect>
+              <rect id="svgBackground" width="100%" height="100%" fill="var(--my-background-color)"></rect>
             </svg>
             <div class="mytext">
               Hello, World! I'm
@@ -66,7 +63,7 @@ describe('my-component', () => {
       <div class="container">
         <div class="wrapper">
           <svg height="100%" width="100%">
-            <rect fill="#242424" height="100%" id="svgBackground" width="100%"></rect>
+            <rect id="svgBackground" width="100%" height="100%" fill="var(--my-background-color)"></rect>
           </svg>
           <div class="mytext">
             Hello, World! I'm
@@ -174,20 +171,16 @@ describe('my-component', () => {
 
   it('should display the svg rect fill with color #242424', async () => {
     await page.setContent('<body style="margin:0px;"><my-component></my-component>');
-    const cmp:E2EElement = await page.find('my-component');
-    await cmp.callMethod('init');
-    await page.waitForChanges();
     const rectColor:string = await getSVGFillColor('my-component','#svgBackground');
     expect(rectColor).toEqual('#242424');    
   });
+
   it('should display the svg rect fill with color #ff0000', async () => {
     await page.setContent('<body style="margin:0px;"><my-component style="--my-background-color:#ff0000;"></my-component>');
-    const cmp:E2EElement = await page.find('my-component');
-    await cmp.callMethod('init');
-    await page.waitForChanges();
     const rectColor:string = await getSVGFillColor('my-component','#svgBackground');
     expect(rectColor).toEqual('#ff0000');    
   });
+
   it('should display the text at position top 10vh+5vh left 10vw+5vw', async () => {
     await page.setContent('<body style="margin:0px;"><my-component></my-component>');
     const rect:any = await getBoundingClientRect('my-component','.mytext'); 
