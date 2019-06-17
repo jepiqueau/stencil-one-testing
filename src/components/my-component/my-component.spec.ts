@@ -38,8 +38,8 @@ describe('my-component', () => {
     root.init();
     await page.waitForChanges();
     expect(root).toEqualHtml(`
-    <my-component class="hydrated" style="--my-background-color: #242424; --my-top: 10vh; --my-left: 10vw; --my-width: 50vw; --my-height: 50vh;">
-      <shadow-root>
+    <my-component style="--my-background-color: #242424; --my-top: 10vh; --my-left: 10vw; --my-width: 50vw; --my-height: 50vh;">
+      <mock:shadow-root>
         <div class="container">
           <div class="wrapper">
             <svg height="100%" width="100%">
@@ -50,9 +50,8 @@ describe('my-component', () => {
             </div>
           </div>
         </div>
-      </shadow-root>
+      </mock:shadow-root>
     </my-component>`);
-    expect(root).toHaveClass('hydrated');
     const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm `);
     root.first = "James";
@@ -87,7 +86,9 @@ describe('my-component', () => {
   });
 
   it('should display svg rect color #242424 ', async () => {
-
+    root.style.setProperty('--my-background-color','#ffff00');
+    root.init();
+    await page.waitForChanges();
     const rectEl:SVGRectElement = await root.shadowRoot.querySelector('#svgBackground');
     const fill:string = rectEl.getAttribute('fill');
     console.log('rectEl fill attribute ', fill);
@@ -112,3 +113,6 @@ describe('my-component change in css properties', () => {
   });
 
 });
+
+
+

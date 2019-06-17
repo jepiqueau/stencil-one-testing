@@ -44,7 +44,7 @@ describe('my-component', () => {
 
     expect(cmp).toEqualHtml(`
       <my-component class="hydrated">
-      <shadow-root>
+      <mock:shadow-root>
         <div class="container">
           <div class="wrapper">
             <svg height="100%" width="100%">
@@ -55,7 +55,7 @@ describe('my-component', () => {
             </div>
           </div>
         </div>
-      </shadow-root>
+      </mock:shadow-root>
     </my-component>
     `);
     expect(cmp.innerHTML).toEqualHtml(``);

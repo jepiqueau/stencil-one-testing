@@ -113,6 +113,7 @@ export class MyComponent {
       this.parseLastProp(this.last ? this.last : "");
       this._backColor = cssVar(window,this.el,'--my-background-color');
       this._backColor = this._backColor ? this._backColor : cssVar(window,this.el,'--my-background-color','#242424');
+      console.log('this._backColor ',this._backColor)
       this._wrapTop = cssVar(window,this.el,'--my-top');
       this._wrapTop = this._wrapTop ? this._wrapTop : cssVar(window,this.el,'my-top','10vh');
       this._wrapLeft = cssVar(window,this.el,'--my-left');
