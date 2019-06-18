@@ -6,7 +6,9 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  LocalCSS,
+} from './global/interface';
 
 export namespace Components {
   interface MyComponent {
@@ -14,6 +16,10 @@ export namespace Components {
     * The first name
     */
     'first': string;
+    /**
+    * Method get local CSS variables
+    */
+    'getLocalCSS': () => Promise<LocalCSS>;
     /**
     * Method initialize
     */

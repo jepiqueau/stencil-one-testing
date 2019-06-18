@@ -84,6 +84,71 @@ describe('my-component', () => {
     const div = await root.shadowRoot.querySelector('.mytext');
     expect(div.textContent).toEqual(`Hello, World! I'm  Jeep`);
   });
+  it('should render with all css variables set to default ', async () => {
+    root.init();
+    await page.waitForChanges();
+    const cssVar:any = await root.getLocalCSS();
+    expect(cssVar.backgroundColor).toEqual('#242424');
+    expect(cssVar.top).toEqual('10vh');
+    expect(cssVar.left).toEqual('10vw');
+    expect(cssVar.width).toEqual('50vw');
+    expect(cssVar.height).toEqual('50vh');
+  });
+  it('should render with --my-background-color set to #ffff00 and all other css variables set to default ', async () => {
+    root.style.setProperty('--my-background-color','#ffff00');
+    root.init();
+    await page.waitForChanges();
+    const cssVar:any = await root.getLocalCSS();
+    expect(cssVar.backgroundColor).toEqual('#ffff00');
+    expect(cssVar.top).toEqual('10vh');
+    expect(cssVar.left).toEqual('10vw');
+    expect(cssVar.width).toEqual('50vw');
+    expect(cssVar.height).toEqual('50vh');
+  });
+  it('should render with --my-top set to 50vh and all other css variables set to default ', async () => {
+    root.style.setProperty('--my-top','50vh');
+    root.init();
+    await page.waitForChanges();
+    const cssVar:any = await root.getLocalCSS();
+    expect(cssVar.backgroundColor).toEqual('#242424');
+    expect(cssVar.top).toEqual('50vh');
+    expect(cssVar.left).toEqual('10vw');
+    expect(cssVar.width).toEqual('50vw');
+    expect(cssVar.height).toEqual('50vh');
+  });
+  it('should render with --my-left set to 50vw and all other css variables set to default ', async () => {
+    root.style.setProperty('--my-left','50vw');
+    root.init();
+    await page.waitForChanges();
+    const cssVar:any = await root.getLocalCSS();
+    expect(cssVar.backgroundColor).toEqual('#242424');
+    expect(cssVar.top).toEqual('10vh');
+    expect(cssVar.left).toEqual('50vw');
+    expect(cssVar.width).toEqual('50vw');
+    expect(cssVar.height).toEqual('50vh');
+  });
+  it('should render with --my-width set to 80vw and all other css variables set to default ', async () => {
+    root.style.setProperty('--my-width','80vw');
+    root.init();
+    await page.waitForChanges();
+    const cssVar:any = await root.getLocalCSS();
+    expect(cssVar.backgroundColor).toEqual('#242424');
+    expect(cssVar.top).toEqual('10vh');
+    expect(cssVar.left).toEqual('10vw');
+    expect(cssVar.width).toEqual('80vw');
+    expect(cssVar.height).toEqual('50vh');
+  });
+  it('should render with --my-height set to 75vh and all other css variables set to default ', async () => {
+    root.style.setProperty('--my-height','75vh');
+    root.init();
+    await page.waitForChanges();
+    const cssVar:any = await root.getLocalCSS();
+    expect(cssVar.backgroundColor).toEqual('#242424');
+    expect(cssVar.top).toEqual('10vh');
+    expect(cssVar.left).toEqual('10vw');
+    expect(cssVar.width).toEqual('50vw');
+    expect(cssVar.height).toEqual('75vh');
+  });
 
   it('should display svg rect color #242424 ', async () => {
     root.style.setProperty('--my-background-color','#ffff00');
@@ -93,26 +158,11 @@ describe('my-component', () => {
     const fill:string = rectEl.getAttribute('fill');
     console.log('rectEl fill attribute ', fill);
     const fillColor = win.getComputedStyle(root).getPropertyValue(fill.substring(4).slice(0,-1));
-    expect(fillColor).toEqual(`#242424`);
+    expect(fillColor).toEqual(`#ffff00`);
   });
 
 });
 
-describe('my-component change in css properties', () => {
-  it('should display svg rect color #ff0000 ', async () => {
-    const page:any = await newSpecPage({
-      components: [MyComponent],
-      html: '<my-component style="--my-background-color:#ff0000"></my-component>'
-    });
-    const root:any = page.root;
-    const win = page.win;
-    const rectEl:SVGRectElement = await root.shadowRoot.querySelector('#svgBackground');
-    const fill:string = rectEl.getAttribute('fill');
-    const fillColor = win.getComputedStyle(root).getPropertyValue(fill.substring(4).slice(0,-1));
-    expect(fillColor).toEqual(`#ff0000`);
-  });
-
-});
 
 
 
