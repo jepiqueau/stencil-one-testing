@@ -17,6 +17,10 @@ export namespace Components {
     */
     'first': string;
     /**
+    * Method get a CSS variable by name
+    */
+    'getCSSVar': (win: any, elem: any, name: string) => Promise<string>;
+    /**
     * Method get local CSS variables
     */
     'getLocalCSS': () => Promise<LocalCSS>;

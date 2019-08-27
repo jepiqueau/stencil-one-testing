@@ -92,6 +92,13 @@ export class MyComponent {
   getLocalCSS(): Promise<LocalCSS> {
     return Promise.resolve(this._localCSS);
   }
+  /**
+   * Method get a CSS variable by name
+   */
+  @Method()
+  getCSSVar(win:any,elem:any,name:string): Promise<string> {
+    return Promise.resolve(cssVar(win,elem,name));
+  }
 
   //*********************************
   //* Internal Variable Definitions *
@@ -116,7 +123,6 @@ export class MyComponent {
       this.parseLastProp(this.last ? this.last : "");
       this._localCSS.backgroundColor = cssVar(window,this.el,'--my-background-color');
       this._localCSS.backgroundColor = this._localCSS.backgroundColor ? this._localCSS.backgroundColor : cssVar(window,this.el,'--my-background-color','#242424');
-      console.log('this._localCSS.backgroundColor ',this._localCSS.backgroundColor)
       this._localCSS.top = cssVar(window,this.el,'--my-top');
       this._localCSS.top = this._localCSS.top ? this._localCSS.top : cssVar(window,this.el,'my-top','10vh');
       this._localCSS.left = cssVar(window,this.el,'--my-left');

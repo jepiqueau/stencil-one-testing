@@ -186,7 +186,7 @@ describe('my-component', () => {
     const rect:any = await getBoundingClientRect('my-component','.mytext'); 
     expect(rect.top).toEqual(96);
     expect(rect.left).toEqual(54);
-    expect(rect.width).toEqual(141.40625);
+    expect(rect.width).toEqual(141.046875);
     expect(rect.height).toEqual(23); 
   });
 });

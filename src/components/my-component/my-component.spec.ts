@@ -150,14 +150,13 @@ describe('my-component', () => {
     expect(cssVar.height).toEqual('75vh');
   });
 
-  it('should display svg rect color #242424 ', async () => {
+  it('should display svg rect color #ffff00 ', async () => {
     root.style.setProperty('--my-background-color','#ffff00');
     root.init();
-    await page.waitForChanges();
+    await page.waitForChanges();      
     const rectEl:SVGRectElement = await root.shadowRoot.querySelector('#svgBackground');
     const fill:string = rectEl.getAttribute('fill');
-    console.log('rectEl fill attribute ', fill);
-    const fillColor = win.getComputedStyle(root).getPropertyValue(fill.substring(4).slice(0,-1));
+    const fillColor = await root.getCSSVar(win,root,fill.substring(4).slice(0,-1));
     expect(fillColor).toEqual(`#ffff00`);
   });
 
